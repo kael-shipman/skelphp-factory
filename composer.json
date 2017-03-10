@@ -1,0 +1,27 @@
+{
+  "name" : "skel/factory",
+  "description" : "A class that provides overridable instantiation of classes based on text descriptors rather than concrete class names.",
+  "type" : "library",
+  "keywords" : [ "factory", "dependency injection", "injector" ],
+  "license" : "GPL3",
+  "authors" : [
+    {
+      "name" : "Kael Shipman",
+      "email" : "kael.shipman@gmail.com",
+      "homepage" : "https://colors.kaelshipman.me",
+      "role" : "Developer"
+    }
+  ],
+  "require" : {
+    "php" : ">=5.4.3",
+    "skel/header" : "dev-master as 0.4"
+  },
+  "require-dev" : {
+    "phpunit/phpunit" : "~6.0"
+  },
+  "autoload" : {
+    "psr-4" : {
+      "Skel\\" : "src/"
+    }
+  }
+}
