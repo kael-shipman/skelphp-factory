@@ -10,6 +10,18 @@ class TestClass {
     $this->one = $one;
     $this->two = $two;
   }
+
+  public function getOne() { return $this->one; }
+  public function getTwo() { return $this->two; }
+
+  public function setOne($val) {
+    $this->one = $val;
+    return $this;
+  }
+  public function setTwo($val) {
+    $this->two = $val;
+    return $this;
+  }
 }
 
 class DerivTestClass extends TestClass {

@@ -4,6 +4,7 @@ namespace Skel;
 abstract class Factory implements Interfaces\Factory {
   protected $context;
   protected static $instance = array();
+  protected static $singletons = array();
 
   protected function __construct() {
   }
@@ -23,6 +24,16 @@ abstract class Factory implements Interfaces\Factory {
     $args = array();
     for($i = 2; $i < func_num_args(); $i++) $args[] = func_get_arg($i);
     return $this->instantiate($class, $type, 'create', $args);
+  }
+
+  public function get(string $class, string $type=null) {
+    $classKey = $this->getClass($class, $type);
+    if (!array_key_exists($classKey, static::$singletons)) {
+      $args = array();
+      for($i = 2; $i < func_num_args(); $i++) $args[] = func_get_arg($i);
+      static::$singletons[$classKey] = $this->instantiate($class, $type, 'new', $args);
+    }
+    return static::$singletons[$classKey];
   }
 
   protected function instantiate(string $class, string $type=null, string $action, array $args) {

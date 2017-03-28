@@ -63,5 +63,24 @@ class FactoryTests extends TestCase {
     $test = $f->create('test');
     $this->assertTrue($test instanceof DerivTestClass);
   }
+
+  public function testSingletons() {
+    $f = TestFactory::getInstance();
+    $test = $f->get('test', null, 1,2);
+    $this->assertEquals(1, $test->getOne());
+
+    $test->setOne(3);
+    $this->assertEquals(3, $test->getOne());
+
+    $newTest = $f->get('test', null, 7,8);
+    $this->assertEquals(3, $newTest->getOne());
+
+    $df = DerivTestFactory::getInstance();
+    $dTest = $df->get('test', null, 10, 11);
+    $this->assertEquals(10, $dTest->getOne());
+
+    $dNewTest = $df->get('test', 'orig', 12, 13);
+    $this->assertEquals(3, $dNewTest->getOne());
+  }
 }
 
