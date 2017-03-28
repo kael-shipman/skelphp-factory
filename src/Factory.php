@@ -4,7 +4,6 @@ namespace Skel;
 abstract class Factory implements Interfaces\Factory {
   protected $context;
   protected static $instance = array();
-  protected static $singletons = array();
 
   protected function __construct() {
   }
@@ -27,13 +26,11 @@ abstract class Factory implements Interfaces\Factory {
   }
 
   public function get(string $class, string $type=null) {
-    $classKey = $this->getClass($class, $type);
-    if (!array_key_exists($classKey, static::$singletons)) {
-      $args = array();
-      for($i = 2; $i < func_num_args(); $i++) $args[] = func_get_arg($i);
-      static::$singletons[$classKey] = $this->instantiate($class, $type, 'new', $args);
-    }
-    return static::$singletons[$classKey];
+    $c = $this->getClass($class, $type);
+    $args = array();
+    for($i = 2; $i < func_num_args(); $i++) $args[] = func_get_arg($i);
+    if (!method_exists($c, 'getInstance')) throw new \RuntimeException("Class `$c` is not a singleton class and therefore can't be accessed via `get` as a singleton. Singletons must have a method `getInstance`. To make `$c` into a singleton, simply implement the `getInstance` method on it.");
+    return call_user_func_array(array($c, 'getInstance'), $args);
   }
 
   protected function instantiate(string $class, string $type=null, string $action, array $args) {

@@ -30,9 +30,49 @@ class DerivTestClass extends TestClass {
   }
 }
 
+class TestSingleton extends TestClass {
+  protected static $instance;
+  public function __construct(int $one, int $two) {
+    if (static::$instance !== null) return static::$instance;
+    parent::__construct($one, $two);
+    static::$instance = $this;
+  }
+
+  public static function getInstance(int $one, int $two) {
+    if (static::$instance === null) static::$instance = new static($one, $two);
+    return static::$instance;
+  }
+}
+
+class DerivTestSingleton extends DerivTestClass {
+  protected static $instance;
+  public function __construct(int $one, int $two) {
+    if (static::$instance !== null) return static::$instance;
+    parent::__construct($one, $two);
+    static::$instance = $this;
+  }
+
+  public static function create() {
+    if (static::$instance !== null) return static::$instance;
+    static::$instance = parent::create();
+    return static::$instance;
+  }
+
+  public static function getInstance(int $one, int $two) {
+    if (static::$instance === null) static::$instance = new static($one, $two);
+    return static::$instance;
+  }
+}
+
+
+
+
+
+
 class TestFactory extends \Skel\Factory {
   public function getClass(string $type, string $subtype=null) {
     if ($type == 'test') {
+      if ($subtype == 'singleton') return 'TestSingleton';
       return 'TestClass';
     }
     return parent::getClass($type, $subtype);
@@ -42,6 +82,8 @@ class TestFactory extends \Skel\Factory {
 class DerivTestFactory extends TestFactory {
   public function getClass(string $type, string $subtype=null) {
     if ($type == 'test') {
+      if ($subtype == 'origSingleton') return parent::getClass($type, 'singleton');
+      if ($subtype == 'singleton') return 'DerivTestSingleton';
       if ($subtype != 'orig') return 'DerivTestClass';
     }
     return parent::getClass($type, $subtype);

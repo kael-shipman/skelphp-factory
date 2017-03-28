@@ -64,22 +64,32 @@ class FactoryTests extends TestCase {
     $this->assertTrue($test instanceof DerivTestClass);
   }
 
+  public function testThrowsErrorOnSingletonGetOfNonSingletonClass() {
+    $f = TestFactory::getInstance();
+    try {
+      $test = $f->get('test', null, 1, 2);
+      $this->fail("Should have thrown an exception getting a singleton instance of a nonsingleton class");
+    } catch (\RuntimeException $e) {
+      $this->assertTrue(true, "This is the correct behavior");
+    }
+  }
+
   public function testSingletons() {
     $f = TestFactory::getInstance();
-    $test = $f->get('test', null, 1,2);
+    $test = $f->get('test', 'singleton', 1,2);
     $this->assertEquals(1, $test->getOne());
 
     $test->setOne(3);
     $this->assertEquals(3, $test->getOne());
 
-    $newTest = $f->get('test', null, 7,8);
+    $newTest = $f->get('test', 'singleton', 7,8);
     $this->assertEquals(3, $newTest->getOne());
 
     $df = DerivTestFactory::getInstance();
-    $dTest = $df->get('test', null, 10, 11);
+    $dTest = $df->get('test', 'singleton', 10, 11);
     $this->assertEquals(10, $dTest->getOne());
 
-    $dNewTest = $df->get('test', 'orig', 12, 13);
+    $dNewTest = $df->get('test', 'origSingleton', 12, 13);
     $this->assertEquals(3, $dNewTest->getOne());
   }
 }
