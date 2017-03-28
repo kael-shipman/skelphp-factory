@@ -3,6 +3,15 @@ namespace Skel;
 
 abstract class Factory implements Interfaces\Factory {
   protected $context;
+  protected static $instance = array();
+
+  protected function __construct() {
+  }
+
+  public static function getInstance() {
+    if (!array_key_exists(static::class, static::$instance)) static::$instance[static::class] = new static();
+    return static::$instance[static::class];
+  }
 
   public function new(string $class, string $type=null) {
     $args = array();

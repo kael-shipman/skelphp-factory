@@ -4,12 +4,12 @@ use PHPUnit\Framework\TestCase;
 
 class FactoryTests extends TestCase {
   public function testNewFactory() {
-    $f = new TestFactory();
+    $f = TestFactory::getInstance();
     $this->assertEquals('TestClass', $f->getClass('test'));
   }
 
   public function testThrowsExceptionOnInvalidStaticCreate() {
-    $f = new TestFactory();
+    $f = TestFactory::getInstance();
 
     try {
       $f->create('test');
@@ -22,7 +22,7 @@ class FactoryTests extends TestCase {
   }
 
   public function testThrowsExceptionOnInvalidInstatiationParams() {
-    $f = new TestFactory();
+    $f = TestFactory::getInstance();
 
     try {
       $f->new('test');
@@ -33,7 +33,7 @@ class FactoryTests extends TestCase {
   }
 
   public function testThrowsExceptionOnUnknownClass() {
-    $f = new TestFactory();
+    $f = TestFactory::getInstance();
 
     try {
       $f->new('invalid');
@@ -44,21 +44,21 @@ class FactoryTests extends TestCase {
   }
 
   public function testCorrectlyInstantiatesClass() {
-    $f = new TestFactory();
+    $f = TestFactory::getInstance();
 
     $test = $f->new('test', null, 1,2);
     $this->assertTrue($test instanceof TestClass);
   }
 
   public function testCorrectlyInstantiatesDerivativeClass() {
-    $f = new DerivTestFactory();
+    $f = DerivTestFactory::getInstance();
 
     $test = $f->new('test', null, 1,2);
     $this->assertTrue($test instanceof DerivTestClass);
   }
 
   public function testCorrectlyUsesStaticMethod() {
-    $f = new DerivTestFactory();
+    $f = DerivTestFactory::getInstance();
 
     $test = $f->create('test');
     $this->assertTrue($test instanceof DerivTestClass);
