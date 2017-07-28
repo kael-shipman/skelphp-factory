@@ -2,7 +2,7 @@
 namespace Skel;
 
 abstract class Factory implements Interfaces\Factory {
-  protected $context;
+  //protected $context;
   protected static $instance = array();
 
   protected function __construct() {
@@ -47,8 +47,9 @@ abstract class Factory implements Interfaces\Factory {
     throw new UnknownClassException("Don't know how to create classes for type `$class::$subtype`");
   }
 
-  public function setContext(Interfaces\Context $c) {
-    $this->context = $c;
-  }
+  // See note in Interfaces/Factory.php about removal of `getContext`
+  //public function setContext(Interfaces\Context $c) {
+  //  $this->context = $c;
+  //}
 }
 
